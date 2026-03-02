@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import './globals.css'; // Global styles
 import { UserProvider } from '@/components/UserContext';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
   title: 'Kala Kit - Dashboard',
@@ -14,6 +15,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
         <UserProvider>
           {children}
         </UserProvider>
+        <Analytics />
       </body>
     </html>
   );
