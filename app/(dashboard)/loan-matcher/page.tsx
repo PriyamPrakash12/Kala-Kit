@@ -64,11 +64,24 @@ export default function LoanMatcher() {
       `;
 
       const response = await ai.models.generateContent({
-        model: 'gemini-3.1-pro-preview',
-        contents: prompt,
-      });
+  model: "gemini-2.5-flash",
+  contents: prompt,
+});
 
-      setResult(response.text || 'No response generated.');
+      let text = "No response generated.";
+
+if (response.candidates && response.candidates.length > 0) {
+  const parts = response.candidates[0].content?.parts;
+
+  if (parts) {
+    text = parts
+      .filter((p) => p.text)
+      .map((p) => p.text)
+      .join("\n");
+  }
+}
+
+setResult(text);
     } catch (error) {
       console.error('Error checking eligibility:', error);
       setResult('An error occurred while checking eligibility. Please try again.');
