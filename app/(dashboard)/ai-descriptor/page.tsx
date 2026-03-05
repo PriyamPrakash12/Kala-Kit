@@ -40,11 +40,24 @@ export default function AIDescriptor() {
       }
 
       const response = await ai.models.generateContent({
-        model: 'gemini-3.1-pro-preview',
-        contents: prompt,
-      });
+  model: "gemini-2.5-flash",
+  contents: prompt,
+});
 
-      setResult(response.text || 'No response generated.');
+      let text = "No response generated.";
+
+if (response.candidates && response.candidates.length > 0) {
+  const parts = response.candidates[0].content?.parts;
+
+  if (parts) {
+    text = parts
+      .filter((p) => p.text)
+      .map((p) => p.text)
+      .join("\n");
+  }
+}
+
+setResult(text);
     } catch (error) {
       console.error('Error generating description:', error);
       setResult('An error occurred. Please try again.');
