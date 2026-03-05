@@ -98,7 +98,24 @@ export default function ImageEnhancer() {
         throw new Error('No image returned from the model.');
       }
 
-      setAnalysisResult(analysisResponse.text || 'No analysis generated.');
+      let analysisText = 'No analysis generated.';
+
+if (
+  analysisResponse.candidates &&
+  analysisResponse.candidates.length > 0
+) {
+  const parts = analysisResponse.candidates[0].content?.parts;
+  if (parts) {
+    for (const part of parts) {
+      if (part.text) {
+        analysisText = part.text;
+        break;
+      }
+    }
+  }
+}
+
+setAnalysisResult(analysisText);
     } catch (error) {
       console.error('Error enhancing image:', error);
       alert('Failed to enhance image. Please try again.');
