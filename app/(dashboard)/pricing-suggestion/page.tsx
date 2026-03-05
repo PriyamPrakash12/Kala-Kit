@@ -53,11 +53,27 @@ export default function PricingSuggestion() {
       `;
 
       const response = await ai.models.generateContent({
-        model: 'gemini-3.1-pro-preview',
-        contents: prompt,
-      });
+  model: 'gemini-2.5-flash',
+  contents: prompt,
+});
 
-      setResult(response.text || 'No response generated.');
+      let analysisText = "No analysis generated.";
+
+if (
+  analysisResponse.candidates &&
+  analysisResponse.candidates.length > 0
+) {
+  const parts = analysisResponse.candidates[0].content?.parts;
+
+  if (parts) {
+    analysisText = parts
+      .filter((part) => part.text)
+      .map((part) => part.text)
+      .join("\n");
+  }
+}
+
+setAnalysisResult(analysisText);
     } catch (error) {
       console.error('Error generating pricing suggestion:', error);
       setResult('An error occurred. Please try again.');
